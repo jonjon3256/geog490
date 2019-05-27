@@ -1,0 +1,23 @@
+---
+title: "Geog490: R for Earth-System Science"
+output: 
+  html_document:
+    css: html-md-01.css
+    fig_caption: no
+    number_section: no
+    toc: no
+    toc_float: FALSE
+    collapsed: no
+---
+
+```{r setup, include=FALSE}
+options(width=105)
+knitr::opts_chunk$set(dev='png', dpi=300, echo = TRUE)
+pdf.options(useDingbats= TRUE)
+```
+
+## Project web page for GEOG 490 for Earth-System Science* ##
+Topics covered here include:
+- An introduction to the project
+- A simple example plottig a raster slice
+- (more to come)
