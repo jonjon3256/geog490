@@ -16,7 +16,7 @@ knitr::opts_chunk$set(dev='png', dpi=300, echo = TRUE)
 pdf.options(useDingbats= TRUE)
 ```
 
-# Project web page for GEOG 490 for Earth-System Science* #
+## Project web page for GEOG 490 for Earth-System Science* ##
 Topics covered here include:
 - An introduction to the project
 - A simple example plottig a raster slice
