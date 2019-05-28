@@ -1,0 +1,89 @@
+---
+title: "Soil Mapping"
+output:
+  html_document:
+    css: html-md-01.css
+    fig_caption: yes
+    highlight: haddock
+    number_sections: yes
+    theme: spacelab
+    toc: yes
+    toc_float: FALSE
+    collapsed: no
+---
+
+```{r setup, include=FALSE}
+options(width = 105)
+knitr::opts_chunk$set(dev='png', dpi=300,cache = TRUE)
+pdf.options(useDingbats = TRUE)
+```
+
+# Introduction #
+This RMarkdown document describes reading and plotting a netCDF file.
+
+## Load packages ##
+```{r load_packages, message=FALSE}
+# load packages
+library(ggplot2)
+library(ncdf4)
+library(raster)
+library(rasterVis)
+library(RColorBrewer)
+library(ggthemes)
+library(ncdf.tools)
+library(zoo)
+library(sf)
+```
+# Read Data #
+## Shapefile ##
+### Read a Shapefile ###
+Read a shapefile
+```{r read_shp}
+shp_path <- "C:\\Users\\jonjo\\Documents\\projects\\geog490\\data\\"
+shp_name <- "ne_110m_admin_0_countries.shp"
+shp_file <- paste(shp_path,shp_name,sep="")
+
+world_shp <- read_sf(shp_file)
+world_outline <- as(st_geometry(world_shp), Class = "Spatial")
+```
+### Plot the shapefile ###
+```{r plot_shapefile}
+# plot the world outlines
+plot(world_outline,col="gray80",lwd=1)
+```
+
+## Read Soil ##
+Now read in soil
+```{r read_data}
+nc_path <- "C:\\Users\\jonjo\\Documents\\geog490\\data\\"
+nc_name <- "soilw.mon.ltm.v2.nc"
+nc_file <- paste(nc_path,nc_name,sep="")
+
+soil_raster <- raster(nc_file,varname="soilw")
+
+soil <- rotate(soil_raster)
+soil
+```
+
+# Plot the data #
+Finally, plot alpha using the `levelplot()` function from `rasterVis`:
+```{r plot_data}
+# rasterVis plot
+maptheme <- rasterTheme(region=brewer.pal(8,"Greens"))
+plt <- levelplot(soil, margin=F, par.settings=maptheme)
+plt + latticeExtra::layer(sp.lines(world_outline, col="gray30", lwd=0.5))
+```
+
+# Plot the next 12 months #
+```{r plot_months}
+NC_soil_ltm <- stack(nc_file,varname="soilw")
+NC_soil_ltm <- rotate(NC_soil_ltm)
+names(NC_soil_ltm) <- c("Dec","Jan","Feb","March","April","May","June","July","August","September","October","November")
+pngfile <- "NC_soil_ltm.png"
+#png(pngfile, width=729, height=729) # open the file
+cutpts <- c(0,100,200,300,400,500,600,700)
+cutpts
+plt <- levelplot(NC_soil_ltm , at=cutpts, cuts=11, pretty=T, 
+                 col.regions=(rev(brewer.pal(10,"RdBu"))))
+plt + latticeExtra::layer(sp.lines(world_outline, col="black", lwd=0.5))
+```
