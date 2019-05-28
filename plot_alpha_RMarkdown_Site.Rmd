@@ -84,6 +84,6 @@ pngfile <- "NC_soil_ltm.png"
 cutpts <- c(0,100,200,300,400,500,600,700)
 cutpts
 plt <- levelplot(NC_soil_ltm , at=cutpts, cuts=11, pretty=T, 
-                 col.regions=(rev(brewer.pal(10,"RdBu"))))
+                 col.regions=(rev(brewer.pal(10,"BrBG"))))
 plt + latticeExtra::layer(sp.lines(world_outline, col="black", lwd=0.5))
 ```
