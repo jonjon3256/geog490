@@ -10,14 +10,17 @@ output:
     collapsed: no
 ---
 
-```{r setup, include=FALSE}
+```{r setup-options, echo=FALSE}
 options(width=105)
 knitr::opts_chunk$set(dev='png', dpi=300, echo = TRUE)
 pdf.options(useDingbats= TRUE)
 ```
 
-## Project web page for GEOG 490 for Earth-System Science* ##
+## Project web page for GEOG 490 *R for Earth-System Science* ##
 Topics covered here include:
-- An introduction to the project
-- A simple example plottig a raster slice
-- (more to come)
+
+  - An introduction to the project
+  
+  - A simple example plottig a raster slice
+  
+  - (more to come)
