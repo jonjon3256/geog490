@@ -6,7 +6,7 @@ navbar:
     menu:
     - text: Introduction
       href: intro.html
-    - text: Raster mapping example
+    - text: Raster mapping
       href: plot_alpha_RMarkdown_Site.html
   right:
   - text: About

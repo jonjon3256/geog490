@@ -37,7 +37,7 @@ library(sf)
 # Read Data #
 ## Shapefile ##
 ### Read a Shapefile ###
-Read a shapefile
+Read world countries shapefile
 ```{r read_shp}
 shp_path <- "C:\\Users\\jonjo\\Documents\\projects\\geog490\\data\\"
 shp_name <- "ne_110m_admin_0_countries.shp"
@@ -53,7 +53,7 @@ plot(world_outline,col="gray80",lwd=1)
 ```
 
 ## Read Soil ##
-Now read in soil
+Now read in soil moisture data with ncdf4 package
 ```{r read_data}
 nc_path <- "C:\\Users\\jonjo\\Documents\\geog490\\data\\"
 nc_name <- "soilw.mon.ltm.v2.nc"
@@ -61,7 +61,7 @@ nc_file <- paste(nc_path,nc_name,sep="")
 
 soil_raster <- raster(nc_file,varname="soilw")
 
-soil <- rotate(soil_raster)
+soil <- rotate(soil_raster) # Convert the coordinates of raster to -180-180 degrees
 soil
 ```
 
@@ -69,21 +69,21 @@ soil
 Finally, plot alpha using the `levelplot()` function from `rasterVis`:
 ```{r plot_data}
 # rasterVis plot
-maptheme <- rasterTheme(region=brewer.pal(8,"Greens"))
+maptheme <- rasterTheme(region=brewer.pal(8,"YlOrBr"))
 plt <- levelplot(soil, margin=F, par.settings=maptheme)
 plt + latticeExtra::layer(sp.lines(world_outline, col="gray30", lwd=0.5))
 ```
 
-# Plot the next 12 months #
+# Plot the long term mean for each month #
 ```{r plot_months}
-NC_soil_ltm <- stack(nc_file,varname="soilw")
-NC_soil_ltm <- rotate(NC_soil_ltm)
+NC_soil_ltm <- stack(nc_file,varname="soilw") # Raster stck object
+NC_soil_ltm <- rotate(NC_soil_ltm) # Rotate the raster object coordinates
 names(NC_soil_ltm) <- c("Dec","Jan","Feb","March","April","May","June","July","August","September","October","November")
-pngfile <- "NC_soil_ltm.png"
+#pngfile <- "NC_soil_ltm.png"
 #png(pngfile, width=729, height=729) # open the file
-cutpts <- c(0,100,200,300,400,500,600,700)
+cutpts <- c(0,100,200,300,400,500,600,700) # Set the cut points at the range of values of the dataset
 cutpts
-plt <- levelplot(NC_soil_ltm , at=cutpts, cuts=11, pretty=T, 
-                 col.regions=(rev(brewer.pal(10,"BrBG"))))
+plt <- levelplot(NC_soil_ltm , at=cutpts, cuts=8, pretty=T, 
+                 col.regions=(brewer.pal(8,"YlOrBr")))
 plt + latticeExtra::layer(sp.lines(world_outline, col="black", lwd=0.5))
 ```

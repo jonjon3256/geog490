@@ -23,3 +23,4 @@ Topics covered here include:
   
   - Plotting long term mean of one month and all months with `raster`,`rasterVis` library
   
+  - Using `raster` to rotate dataset to standard coordinates between -180-180, since global climate run 0-360
