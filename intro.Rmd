@@ -19,6 +19,12 @@ options(width = 105)
 knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE)
 pdf.options(useDingbats = TRUE)
 ```
-The visualization developed here uses the `raster` and `rasterVis` packages to map the global
-pattern of alpha, calculated using the CRU CL2 climate data set.  The maps also include a
-shapefile of world coastlines and countries.
+ - The packages that were used for visualizing the data were `raster` and `rasterVis` to display the global pattern of soil moisture.
+ 
+ - There is also a world country shapefile to help visualize the data
+ 
+ - The dataset being used is long term monthly means from the years 1981-2010
+ 
+ - The URL for the data: https://www.esrl.noaa.gov/psd/data/gridded/data.cpcsoil.html
+ 
+ - 

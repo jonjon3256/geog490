@@ -1,6 +1,6 @@
-name: GEOG 4/590
+name: GEOG 490
 navbar:
-  title: "GEOG 4/590:  R for Earth-System Science"
+  title: "GEOG 490:  R for Earth-System Science"
   left:
   - text: Topics
     menu:

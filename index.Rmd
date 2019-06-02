@@ -1,5 +1,5 @@
 ---
-title: "Geog490: R for Earth-System Science"
+title: "Geog490: R for Earth-System Science Final Project"
 output: 
   html_document:
     css: html-md-01.css
@@ -21,6 +21,5 @@ Topics covered here include:
 
   - An introduction to the project
   
-  - A simple example plottig a raster slice
+  - Plotting long term mean of one month and all months with `raster`,`rasterVis` library
   
-  - (more to come)
