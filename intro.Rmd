@@ -23,7 +23,7 @@ pdf.options(useDingbats = TRUE)
  
  - There is also a world country shapefile to help visualize the data
  
- - The dataset being used is long term monthly means from the years 1981-2010
+ - The dataset being used is long term monthly soil moisture means from the years 1981-2010
  
  - The URL for the data: https://www.esrl.noaa.gov/psd/data/gridded/data.cpcsoil.html
  
