@@ -54,6 +54,8 @@ plot(world_outline,col="gray80",lwd=1)
 
 ## Read Soil ##
 Now read in soil moisture data with ncdf4 package
+
++ Plotting raster before rotating coordinates 
 ```{r read_data}
 nc_path <- "C:\\Users\\jonjo\\Documents\\geog490\\data\\"
 nc_name <- "soilw.mon.ltm.v2.nc"
@@ -61,12 +63,20 @@ nc_file <- paste(nc_path,nc_name,sep="")
 
 soil_raster <- raster(nc_file,varname="soilw")
 
-soil <- rotate(soil_raster) # Convert the coordinates of raster to -180-180 degrees
+soil_raster # Convert the coordinates of raster to -180-180 degrees
+```
+
++ Plotting raster after rotating coordinates 
+
+
+```{r after_raster}
+soil <- rotate(soil_raster)
+
 soil
 ```
 
 # Plot the data #
-Finally, plot alpha using the `levelplot()` function from `rasterVis`:
+Finally, plot the soil moisture data using the `levelplot()` function from `rasterVis`:
 ```{r plot_data}
 # rasterVis plot
 maptheme <- rasterTheme(region=brewer.pal(8,"YlOrBr"))

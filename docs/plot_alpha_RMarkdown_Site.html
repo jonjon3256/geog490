@@ -451,14 +451,32 @@ $(document).ready(function () {
 <div id="read-soil" class="section level2">
 <h2><span class="header-section-number">2.2</span> Read Soil</h2>
 <p>Now read in soil moisture data with ncdf4 package</p>
+<ul>
+<li>Plotting raster before rotating coordinates</li>
+</ul>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1">nc_path &lt;-<span class="st"> &quot;C:</span><span class="ch">\\</span><span class="st">Users</span><span class="ch">\\</span><span class="st">jonjo</span><span class="ch">\\</span><span class="st">Documents</span><span class="ch">\\</span><span class="st">geog490</span><span class="ch">\\</span><span class="st">data</span><span class="ch">\\</span><span class="st">&quot;</span></a>
 <a class="sourceLine" id="cb17-2" title="2">nc_name &lt;-<span class="st"> &quot;soilw.mon.ltm.v2.nc&quot;</span></a>
 <a class="sourceLine" id="cb17-3" title="3">nc_file &lt;-<span class="st"> </span><span class="kw">paste</span>(nc_path,nc_name,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
 <a class="sourceLine" id="cb17-4" title="4"></a>
 <a class="sourceLine" id="cb17-5" title="5">soil_raster &lt;-<span class="st"> </span><span class="kw">raster</span>(nc_file,<span class="dt">varname=</span><span class="st">&quot;soilw&quot;</span>)</a>
 <a class="sourceLine" id="cb17-6" title="6"></a>
-<a class="sourceLine" id="cb17-7" title="7">soil &lt;-<span class="st"> </span><span class="kw">rotate</span>(soil_raster) <span class="co"># Convert the coordinates of raster to -180-180 degrees</span></a>
-<a class="sourceLine" id="cb17-8" title="8">soil</a></code></pre></div>
+<a class="sourceLine" id="cb17-7" title="7">soil_raster <span class="co"># Convert the coordinates of raster to -180-180 degrees</span></a></code></pre></div>
+<pre><code>## class       : RasterLayer 
+## band        : 1  (of  12  bands)
+## dimensions  : 360, 720, 259200  (nrow, ncol, ncell)
+## resolution  : 0.5, 0.5  (x, y)
+## extent      : 0, 360, -90, 90  (xmin, xmax, ymin, ymax)
+## coord. ref. : +proj=longlat +datum=WGS84 
+## data source : C:/Users/jonjo/Documents/geog490/data/soilw.mon.ltm.v2.nc 
+## names       : Model.Calculated.Long.Term.Monthly.Mean.Soil.Moisture 
+## z-value     : 0000-12-30 
+## zvar        : soilw</code></pre>
+<ul>
+<li>Plotting raster after rotating coordinates</li>
+</ul>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1">soil &lt;-<span class="st"> </span><span class="kw">rotate</span>(soil_raster)</a>
+<a class="sourceLine" id="cb19-2" title="2"></a>
+<a class="sourceLine" id="cb19-3" title="3">soil</a></code></pre></div>
 <pre><code>## class       : RasterLayer 
 ## dimensions  : 360, 720, 259200  (nrow, ncol, ncell)
 ## resolution  : 0.5, 0.5  (x, y)
@@ -472,26 +490,26 @@ $(document).ready(function () {
 </div>
 <div id="plot-the-data" class="section level1">
 <h1><span class="header-section-number">3</span> Plot the data</h1>
-<p>Finally, plot alpha using the <code>levelplot()</code> function from <code>rasterVis</code>:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1"><span class="co"># rasterVis plot</span></a>
-<a class="sourceLine" id="cb19-2" title="2">maptheme &lt;-<span class="st"> </span><span class="kw">rasterTheme</span>(<span class="dt">region=</span><span class="kw">brewer.pal</span>(<span class="dv">8</span>,<span class="st">&quot;YlOrBr&quot;</span>))</a>
-<a class="sourceLine" id="cb19-3" title="3">plt &lt;-<span class="st"> </span><span class="kw">levelplot</span>(soil, <span class="dt">margin=</span>F, <span class="dt">par.settings=</span>maptheme)</a>
-<a class="sourceLine" id="cb19-4" title="4">plt <span class="op">+</span><span class="st"> </span>latticeExtra<span class="op">::</span><span class="kw">layer</span>(<span class="kw">sp.lines</span>(world_outline, <span class="dt">col=</span><span class="st">&quot;gray30&quot;</span>, <span class="dt">lwd=</span><span class="fl">0.5</span>))</a></code></pre></div>
+<p>Finally, plot the soil moisture data using the <code>levelplot()</code> function from <code>rasterVis</code>:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1"><span class="co"># rasterVis plot</span></a>
+<a class="sourceLine" id="cb21-2" title="2">maptheme &lt;-<span class="st"> </span><span class="kw">rasterTheme</span>(<span class="dt">region=</span><span class="kw">brewer.pal</span>(<span class="dv">8</span>,<span class="st">&quot;YlOrBr&quot;</span>))</a>
+<a class="sourceLine" id="cb21-3" title="3">plt &lt;-<span class="st"> </span><span class="kw">levelplot</span>(soil, <span class="dt">margin=</span>F, <span class="dt">par.settings=</span>maptheme)</a>
+<a class="sourceLine" id="cb21-4" title="4">plt <span class="op">+</span><span class="st"> </span>latticeExtra<span class="op">::</span><span class="kw">layer</span>(<span class="kw">sp.lines</span>(world_outline, <span class="dt">col=</span><span class="st">&quot;gray30&quot;</span>, <span class="dt">lwd=</span><span class="fl">0.5</span>))</a></code></pre></div>
 <p><img src="plot_alpha_RMarkdown_Site_files/figure-html/plot_data-1.png" width="2100" /></p>
 </div>
 <div id="plot-the-long-term-mean-for-each-month" class="section level1">
 <h1><span class="header-section-number">4</span> Plot the long term mean for each month</h1>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" title="1">NC_soil_ltm &lt;-<span class="st"> </span><span class="kw">stack</span>(nc_file,<span class="dt">varname=</span><span class="st">&quot;soilw&quot;</span>) <span class="co"># Raster stck object</span></a>
-<a class="sourceLine" id="cb20-2" title="2">NC_soil_ltm &lt;-<span class="st"> </span><span class="kw">rotate</span>(NC_soil_ltm) <span class="co"># Rotate the raster object coordinates</span></a>
-<a class="sourceLine" id="cb20-3" title="3"><span class="kw">names</span>(NC_soil_ltm) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Dec&quot;</span>,<span class="st">&quot;Jan&quot;</span>,<span class="st">&quot;Feb&quot;</span>,<span class="st">&quot;March&quot;</span>,<span class="st">&quot;April&quot;</span>,<span class="st">&quot;May&quot;</span>,<span class="st">&quot;June&quot;</span>,<span class="st">&quot;July&quot;</span>,<span class="st">&quot;August&quot;</span>,<span class="st">&quot;September&quot;</span>,<span class="st">&quot;October&quot;</span>,<span class="st">&quot;November&quot;</span>)</a>
-<a class="sourceLine" id="cb20-4" title="4"><span class="co">#pngfile &lt;- &quot;NC_soil_ltm.png&quot;</span></a>
-<a class="sourceLine" id="cb20-5" title="5"><span class="co">#png(pngfile, width=729, height=729) # open the file</span></a>
-<a class="sourceLine" id="cb20-6" title="6">cutpts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">100</span>,<span class="dv">200</span>,<span class="dv">300</span>,<span class="dv">400</span>,<span class="dv">500</span>,<span class="dv">600</span>,<span class="dv">700</span>) <span class="co"># Set the cut points at the range of values of the dataset</span></a>
-<a class="sourceLine" id="cb20-7" title="7">cutpts</a></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" title="1">NC_soil_ltm &lt;-<span class="st"> </span><span class="kw">stack</span>(nc_file,<span class="dt">varname=</span><span class="st">&quot;soilw&quot;</span>) <span class="co"># Raster stck object</span></a>
+<a class="sourceLine" id="cb22-2" title="2">NC_soil_ltm &lt;-<span class="st"> </span><span class="kw">rotate</span>(NC_soil_ltm) <span class="co"># Rotate the raster object coordinates</span></a>
+<a class="sourceLine" id="cb22-3" title="3"><span class="kw">names</span>(NC_soil_ltm) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Dec&quot;</span>,<span class="st">&quot;Jan&quot;</span>,<span class="st">&quot;Feb&quot;</span>,<span class="st">&quot;March&quot;</span>,<span class="st">&quot;April&quot;</span>,<span class="st">&quot;May&quot;</span>,<span class="st">&quot;June&quot;</span>,<span class="st">&quot;July&quot;</span>,<span class="st">&quot;August&quot;</span>,<span class="st">&quot;September&quot;</span>,<span class="st">&quot;October&quot;</span>,<span class="st">&quot;November&quot;</span>)</a>
+<a class="sourceLine" id="cb22-4" title="4"><span class="co">#pngfile &lt;- &quot;NC_soil_ltm.png&quot;</span></a>
+<a class="sourceLine" id="cb22-5" title="5"><span class="co">#png(pngfile, width=729, height=729) # open the file</span></a>
+<a class="sourceLine" id="cb22-6" title="6">cutpts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">100</span>,<span class="dv">200</span>,<span class="dv">300</span>,<span class="dv">400</span>,<span class="dv">500</span>,<span class="dv">600</span>,<span class="dv">700</span>) <span class="co"># Set the cut points at the range of values of the dataset</span></a>
+<a class="sourceLine" id="cb22-7" title="7">cutpts</a></code></pre></div>
 <pre><code>## [1]   0 100 200 300 400 500 600 700</code></pre>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" title="1">plt &lt;-<span class="st"> </span><span class="kw">levelplot</span>(NC_soil_ltm , <span class="dt">at=</span>cutpts, <span class="dt">cuts=</span><span class="dv">8</span>, <span class="dt">pretty=</span>T, </a>
-<a class="sourceLine" id="cb22-2" title="2">                 <span class="dt">col.regions=</span>(<span class="kw">brewer.pal</span>(<span class="dv">8</span>,<span class="st">&quot;YlOrBr&quot;</span>)))</a>
-<a class="sourceLine" id="cb22-3" title="3">plt <span class="op">+</span><span class="st"> </span>latticeExtra<span class="op">::</span><span class="kw">layer</span>(<span class="kw">sp.lines</span>(world_outline, <span class="dt">col=</span><span class="st">&quot;black&quot;</span>, <span class="dt">lwd=</span><span class="fl">0.5</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" title="1">plt &lt;-<span class="st"> </span><span class="kw">levelplot</span>(NC_soil_ltm , <span class="dt">at=</span>cutpts, <span class="dt">cuts=</span><span class="dv">8</span>, <span class="dt">pretty=</span>T, </a>
+<a class="sourceLine" id="cb24-2" title="2">                 <span class="dt">col.regions=</span>(<span class="kw">brewer.pal</span>(<span class="dv">8</span>,<span class="st">&quot;YlOrBr&quot;</span>)))</a>
+<a class="sourceLine" id="cb24-3" title="3">plt <span class="op">+</span><span class="st"> </span>latticeExtra<span class="op">::</span><span class="kw">layer</span>(<span class="kw">sp.lines</span>(world_outline, <span class="dt">col=</span><span class="st">&quot;black&quot;</span>, <span class="dt">lwd=</span><span class="fl">0.5</span>))</a></code></pre></div>
 <p><img src="plot_alpha_RMarkdown_Site_files/figure-html/plot_months-1.png" width="2100" /></p>
 </div>
 
