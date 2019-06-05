@@ -55,7 +55,7 @@ plot(world_outline,col="gray80",lwd=1)
 ## Read Soil ##
 Now read in soil moisture data with ncdf4 package
 
-+ Plotting raster before rotating coordinates 
++ This piece of code displays the raster coordinate extent before rotating the coordinate system.
 ```{r read_data}
 nc_path <- "C:\\Users\\jonjo\\Documents\\geog490\\data\\"
 nc_name <- "soilw.mon.ltm.v2.nc"
@@ -66,7 +66,7 @@ soil_raster <- raster(nc_file,varname="soilw")
 soil_raster # Convert the coordinates of raster to -180-180 degrees
 ```
 
-+ Plotting raster after rotating coordinates 
++ This is after rotating the coordinate system to fit the plot
 
 
 ```{r after_raster}
@@ -76,15 +76,15 @@ soil
 ```
 
 # Plot the data #
-Finally, plot the soil moisture data using the `levelplot()` function from `rasterVis`:
+Finally, plot the soil moisture data using the `levelplot()` function from `rasterVis` for one month:
 ```{r plot_data}
 # rasterVis plot
-maptheme <- rasterTheme(region=brewer.pal(8,"YlOrBr"))
-plt <- levelplot(soil, margin=F, par.settings=maptheme)
+maptheme <- rasterTheme(region=brewer.pal(8,"Oranges"))
+plt <- levelplot(soil, margin=F, par.settings=maptheme,main="Soil Moisture mean")
 plt + latticeExtra::layer(sp.lines(world_outline, col="gray30", lwd=0.5))
 ```
 
-# Plot the long term mean for each month #
+# Plot the long term soil moisture mean for each month #
 ```{r plot_months}
 NC_soil_ltm <- stack(nc_file,varname="soilw") # Raster stck object
 NC_soil_ltm <- rotate(NC_soil_ltm) # Rotate the raster object coordinates
@@ -94,6 +94,6 @@ names(NC_soil_ltm) <- c("Dec","Jan","Feb","March","April","May","June","July","A
 cutpts <- c(0,100,200,300,400,500,600,700) # Set the cut points at the range of values of the dataset
 cutpts
 plt <- levelplot(NC_soil_ltm , at=cutpts, cuts=8, pretty=T, 
-                 col.regions=(brewer.pal(8,"YlOrBr")))
+                 col.regions=(brewer.pal(8,"Oranges")))
 plt + latticeExtra::layer(sp.lines(world_outline, col="black", lwd=0.5))
 ```
