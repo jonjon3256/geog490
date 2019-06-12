@@ -33,6 +33,7 @@ library(ggthemes)
 library(ncdf.tools)
 library(zoo)
 library(sf)
+library(gridExtra)
 ```
 # Read Data #
 ## Shapefile ##
@@ -53,7 +54,7 @@ plot(world_outline,col="gray80",lwd=1)
 ```
 
 ## Read Soil ##
-Now read in soil moisture data with ncdf4 package
+**Now read in soil moisture data with ncdf4 package**
 
 + This piece of code displays the raster coordinate extent before rotating the coordinate system.
 ```{r read_data}
@@ -61,39 +62,71 @@ nc_path <- "C:\\Users\\jonjo\\Documents\\geog490\\data\\"
 nc_name <- "soilw.mon.ltm.v2.nc"
 nc_file <- paste(nc_path,nc_name,sep="")
 
-soil_raster <- raster(nc_file,varname="soilw")
+soil_raster_dec <- raster(nc_file,varname="soilw",band=1)
 
-soil_raster # Convert the coordinates of raster to -180-180 degrees
+soil_raster_dec # Convert the coordinates of raster to -180-180 degrees
 ```
 
 + This is after rotating the coordinate system to fit the plot
 
 
 ```{r after_raster}
-soil <- rotate(soil_raster)
+soil_dec <- rotate(soil_raster_dec)
 
-soil
+soil_dec
 ```
 
 # Plot the data #
-Finally, plot the soil moisture data using the `levelplot()` function from `rasterVis` for one month:
+**Finally, plot the soil moisture data using the `levelplot()` function from `rasterVis` for month of December:**
 ```{r plot_data}
 # rasterVis plot
+#soil_raster <- raster(nc_file,varname="soilw")
 maptheme <- rasterTheme(region=brewer.pal(8,"Oranges"))
-plt <- levelplot(soil, margin=F, par.settings=maptheme,main="Soil Moisture mean")
+plt <- levelplot(soil_dec, margin=F, par.settings=maptheme,main="Soil Moisture mean for December")
 plt + latticeExtra::layer(sp.lines(world_outline, col="gray30", lwd=0.5))
 ```
+
+## Plot months December and August ##
+**By creating a second raster stack object specifying band 9, I will get the soil moisture from August**
+
+```{r soil_august}
+soil_raster_aug <- raster(nc_file,varname="soilw",band=9)
+
+soil_raster_aug # Convert the coordinates of raster to -180-180 degrees
+```
+
+
+```{r after_raster2}
+soil_aug <- rotate(soil_raster_aug)
+
+soil_aug
+```
+
+
+**I created two different plots and by using the library `gridExtra` I am able to display the two plots side by side with `grid.arrange()`. We can see the difference in soil moisture between the two months.**
+```{r plot_dec/aug}
+par(mfrow=c(1,2))
+maptheme <- rasterTheme(region=brewer.pal(8,"Oranges"))
+plt1 <- levelplot(soil_dec, margin=F, par.settings=maptheme,main="December mean Soil Moisture")
+plt_1 <- plt1 + latticeExtra::layer(sp.lines(world_outline, col="gray30", lwd=0.5))
+
+maptheme <- rasterTheme(region=brewer.pal(8,"Oranges"))
+plt2 <- levelplot(soil_aug, margin=F, par.settings=maptheme,main="August mean Soil Moisture")
+plt_2 <- plt2 + latticeExtra::layer(sp.lines(world_outline, col="gray30", lwd=0.5))
+
+grid.arrange(plt_1,plt_2,ncol=2)
+```
+
 
 # Plot the long term soil moisture mean for each month #
 ```{r plot_months}
 NC_soil_ltm <- stack(nc_file,varname="soilw") # Raster stck object
 NC_soil_ltm <- rotate(NC_soil_ltm) # Rotate the raster object coordinates
 names(NC_soil_ltm) <- c("Dec","Jan","Feb","March","April","May","June","July","August","September","October","November")
-#pngfile <- "NC_soil_ltm.png"
-#png(pngfile, width=729, height=729) # open the file
-cutpts <- c(0,100,200,300,400,500,600,700) # Set the cut points at the range of values of the dataset
-cutpts
+cutpts <- c(0,100,200,300,400,500,600,700) # Set the cut points at the range of values of the dataset'
+
 plt <- levelplot(NC_soil_ltm , at=cutpts, cuts=8, pretty=T, 
                  col.regions=(brewer.pal(8,"Oranges")))
 plt + latticeExtra::layer(sp.lines(world_outline, col="black", lwd=0.5))
 ```
+**As we can see based on the long term mean per month, there is a slight difference we can see throughout the months. We can see that land along the equator espcially north of South America has consistent amount of soil moisture all year long, so their is consistent amount of rainfall in those areas. One thing to point out is the lower/mid latitudes of South America have a much higher amount of soil moisture recorded in the winter/spring season than in the summer. So, it is safe to assume that the drier/hotter seasons are in the summer compared to the others. If we focus are attention to the Pacific Northwest, we can see that there is a correlation between the soil moisture recorded and the time of year it was recorded. Since their is a great amount of precipitation in the winter and spring, those spots on the map have a darker tone meaning a higher amount recorded compared to those months in the summer.**
