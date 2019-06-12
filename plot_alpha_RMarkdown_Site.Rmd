@@ -115,6 +115,7 @@ plt2 <- levelplot(soil_aug, margin=F, par.settings=maptheme,main="August mean So
 plt_2 <- plt2 + latticeExtra::layer(sp.lines(world_outline, col="gray30", lwd=0.5))
 
 grid.arrange(plt_1,plt_2,ncol=2)
+
 ```
 
 
